@@ -2,3 +2,23 @@ spring:
   threads:
     virtual:
       enabled: true
+
+  kafka:
+    bootstrap-servers: 100.85.100.83:9093
+    consumer:
+      auto-offset-reset: latest
+      max-poll-records: 1
+      enable-auto-commit: false
+      key-deserializer: dev.lutergs.blog.user.infra.token.serialize.KafkaTokenMessageKeyDeserializer
+      value-deserializer: dev.lutergs.blog.user.infra.token.serialize.KafkaTokenMessageValueDeserializer
+    listener:
+      ack-mode: manual
+      async-acks: false
+      concurrency: 1
+      type: single
+    properties:
+      security.protocol: SASL_SSL
+      sasl.mechanism: PLAIN
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver

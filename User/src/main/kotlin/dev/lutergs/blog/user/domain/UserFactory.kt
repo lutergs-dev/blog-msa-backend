@@ -1,5 +1,11 @@
 package dev.lutergs.blog.user.domain
 
-class UserFactory {
-    fun createUser(name: String, ...)
+import dev.lutergs.blog.user.domain.entity.Account
+import dev.lutergs.blog.user.domain.entity.NickName
+import java.time.OffsetDateTime
+
+object UserFactory {
+    fun createUserFromAccount(account: Account): User {
+        return User(account, OffsetDateTime.now(), NickName.createRandomNickName())
+    }
 }

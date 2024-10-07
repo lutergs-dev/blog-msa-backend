@@ -1,9 +1,11 @@
 package dev.lutergs.blog.user.infra.configuration
 
+import dev.lutergs.blog.user.infra.token.TokenGeneratorImpl
 import dev.lutergs.blog.user.infra.configuration.properties.GoogleOAuthConfigurationProperties
 import dev.lutergs.blog.user.infra.configuration.properties.ServerConfigurationProperties
 import dev.lutergs.blog.user.infra.configuration.properties.TokenConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
@@ -17,4 +19,7 @@ class SpringConfiguration(
     private val serverConfigurationProperties: ServerConfigurationProperties,
     private val tokenConfigurationProperties: TokenConfigurationProperties
 ) {
+
+    @Bean
+    fun tokenGeneratorImpl(): TokenGeneratorImpl = TokenGeneratorImpl(this.tokenConfigurationProperties)
 }

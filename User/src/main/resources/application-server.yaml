@@ -1,0 +1,31 @@
+spring:
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    consumer:
+      group-id: lutergs-blog-user-service
+    properties:
+      sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username='${USERNAME}' password='${PASSWORD}';
+      ssl.truststore.location: ${SSL_TRUSTSTORE_LOCATION}
+      ssl.truststore.password: ${SSL_TRUSTSTORE_PASSWORD}
+
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+
+lutergs:
+  blog:
+    user:
+      token:
+        expire-hour: ${TOKEN_EXPIRE_HOUR}
+        secure-cookie: ${IS_SECURE_COOKIE}
+        value-kafka-topic-name: ${TOKEN_UPDATE_KAFKA_TOPIC}
+      server:
+        backend: ${BACKEND_SERVER_URL}
+        frontend: ${FRONTEND_SERVER_URL}
+        root-domain: ${ROOT_DOMAIN}
+      oauth:
+        google:
+          client-id: ${GOOGLE_OAUTH_CLIENT_ID}
+          client-secret: ${GOOGLE_OAUTH_CLIENT_SECRET}

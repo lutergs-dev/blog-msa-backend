@@ -1,13 +1,17 @@
 package dev.lutergs.blog.user.domain
 
 import dev.lutergs.blog.user.domain.entity.Account
+import dev.lutergs.blog.user.domain.entity.NickName
 import java.time.OffsetDateTime
 
 
 // root aggregate, account 정보를 가지고 있음
 class User internal constructor (
-    val account: dev.lutergs.blog.user.domain.entity.Account,
+    val account: Account,
     val createdAt: OffsetDateTime,
-    val nickName: String
+    val nickName: NickName
 ) {
+    fun changeNickName(newNickName: NickName): User {
+        return User(account, createdAt, newNickName)
+    }
 }
