@@ -1,18 +1,20 @@
 package dev.lutergs.blog.user.infra.oauth
 
 import dev.lutergs.blog.user.domain.entity.Account
+import dev.lutergs.blog.user.domain.repository.AccountRepository
 import dev.lutergs.blog.user.domain.repository.OAuthRequester
 import dev.lutergs.blog.user.domain.value.Vendor
 import dev.lutergs.blog.user.infra.configuration.properties.GoogleOAuthConfigurationProperties
 import dev.lutergs.blog.user.infra.oauth.entity.GoogleOAuthInfo
 import dev.lutergs.blog.user.infra.oauth.entity.GoogleUserInfo
-import dev.lutergs.blog.utils.getVTRestClient
+import dev.lutergs.blog.utils.nonspring.getVTRestClient
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.web.client.RestClient
 
 class GoogleOAuthRequester(
-    private val properties: GoogleOAuthConfigurationProperties
+    private val properties: GoogleOAuthConfigurationProperties,
+    private val accountRepository: AccountRepository
 ): OAuthRequester {
     private val oauthInfoRequester: RestClient = getVTRestClient(RestClient.builder()
         .baseUrl("https://oauth2.googleapis.com/token")
@@ -26,7 +28,7 @@ class GoogleOAuthRequester(
         return this.getGoogleOauthInfo(code, redirectionUrl)
             .let { this.getGoogleUserInfo(it.accessToken) }
             .email.split("@").first()
-            .let { Account(Vendor.GOOGLE, it) }
+            .let { this.accountRepository.createAccountByVendorAndLocalPart(Vendor.GOOGLE, it) }
     }
 
     private fun getGoogleOauthInfo(code: String, redirectUri: String): GoogleOAuthInfo {

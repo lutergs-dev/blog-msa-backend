@@ -16,16 +16,23 @@ spring:
 
 lutergs:
   blog:
+    server:
+      backend: ${BACKEND_SERVER_URL}
+      frontend: ${FRONTEND_SERVER_URL}
+      root-domain: ${ROOT_DOMAIN}
     user:
       token:
-        expire-hour: ${TOKEN_EXPIRE_HOUR}
-        secure-cookie: ${IS_SECURE_COOKIE}
-        value-kafka-topic-name: ${TOKEN_UPDATE_KAFKA_TOPIC}
-      server:
-        backend: ${BACKEND_SERVER_URL}
-        frontend: ${FRONTEND_SERVER_URL}
-        root-domain: ${ROOT_DOMAIN}
+        access-token-expire-hour: ${ACCESS_TOKEN_EXPIRE_HOUR}
+        refresh-token-expire-hour: ${REFRESH_TOKEN_EXPIRE_HOUR}
+        jwt:
+          rsa-key-receive-topic-name: ${RSA_KEY_RECEIVE_KAFKA_TOPIC}
+          issuer: ${JWT_ISSUER}
+          subject: ${JWT_SUBJECT}
+          claim-suffix: ${JWT_CLAIM_SUFFIX}
       oauth:
         google:
           client-id: ${GOOGLE_OAUTH_CLIENT_ID}
           client-secret: ${GOOGLE_OAUTH_CLIENT_SECRET}
+
+server:
+  port: ${SERVER_PORT}

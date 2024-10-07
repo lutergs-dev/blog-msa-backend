@@ -30,7 +30,6 @@ class KafkaTokenMessageValueDeserializer: Deserializer<KafkaTokenMessageValue?> 
             )
         }.onFailure { this.logger.error(it) { "decode Private Key, Public Key Failed! Key will not update."} }
             .getOrNull()
-
     }
 
     private fun loadPrivateKey(rawPrivateKey: String): RSAPrivateKey {

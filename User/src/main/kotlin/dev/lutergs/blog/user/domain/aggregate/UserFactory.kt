@@ -1,4 +1,4 @@
-package dev.lutergs.blog.user.domain
+package dev.lutergs.blog.user.domain.aggregate
 
 import dev.lutergs.blog.user.domain.entity.Account
 import dev.lutergs.blog.user.domain.entity.NickName
