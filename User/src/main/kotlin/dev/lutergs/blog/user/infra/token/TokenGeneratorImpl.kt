@@ -14,6 +14,7 @@ class TokenGeneratorImpl(
     private val tokenProperties: TokenConfigurationProperties
 ): TokenGenerator {
 
+    // TODO : need to set redis!
     override fun createTokenFromAccount(account: Account): Pair<AccessToken, RefreshToken> {
         val accessToken = this.jwtTokenCreator
             .createJWSFromAccount(account, tokenProperties.accessTokenExpireHour)

@@ -12,6 +12,10 @@ import dev.lutergs.blog.user.infra.configuration.properties.TokenConfigurationPr
 import dev.lutergs.blog.user.infra.controller.UserController
 import dev.lutergs.blog.user.infra.controller.route
 import dev.lutergs.blog.user.infra.oauth.GoogleOAuthRequester
+import dev.lutergs.blog.user.infra.repository.account.AccountRepositoryImpl
+import dev.lutergs.blog.user.infra.repository.account.DbAccountEntityRepository
+import dev.lutergs.blog.user.infra.repository.user.DbUserEntityRepository
+import dev.lutergs.blog.user.infra.repository.user.UserRepositoryImpl
 import dev.lutergs.blog.user.infra.token.TokenGeneratorImpl
 import dev.lutergs.blog.user.service.UserService
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -54,10 +58,27 @@ class SpringConfiguration(
 
     @Bean
     fun googleOAuthRequester(
-        accountRepository: AccountRepository
     ): GoogleOAuthRequester = GoogleOAuthRequester(
-        properties = this.googleOAuthConfigurationProperties,
-        accountRepository = accountRepository
+        properties = this.googleOAuthConfigurationProperties
+    )
+
+
+    //================================ infra.repository =======================================
+
+    @Bean
+    fun accountRepositoryImpl(
+        dbAccountEntityRepository: DbAccountEntityRepository
+    ): AccountRepositoryImpl = AccountRepositoryImpl(
+        repository = dbAccountEntityRepository
+    )
+
+    @Bean
+    fun userRepositoryImpl(
+        dbUserEntityRepository: DbUserEntityRepository,
+        dbAccountEntityRepository: DbAccountEntityRepository
+    ): UserRepositoryImpl = UserRepositoryImpl(
+        repository = dbUserEntityRepository,
+        accountRepository = dbAccountEntityRepository
     )
 
 
@@ -88,10 +109,12 @@ class SpringConfiguration(
     @Bean
     fun userService(
         userRepository: UserRepository,
+        accountRepository: AccountRepository,
         oauthRequester: OAuthRequester,
         tokenGenerator: TokenGenerator
     ): UserService = UserService(
         userRepository = userRepository,
+        accountRepository = accountRepository,
         oauthRequester = oauthRequester,
         tokenGenerator = tokenGenerator
     )
