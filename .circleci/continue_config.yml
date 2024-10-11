@@ -14,7 +14,6 @@ parameters:
 
 jobs:
   test-user-service:
-    executor: docker
     docker:
       - image: cimg/openjdk:21
     resource_class: lutergs/lutergs-minipc
@@ -25,7 +24,6 @@ jobs:
           command: |
             ./gradlew User:test
   ci-user-service:
-    executor: docker
     docker:
       - image: cimg/openjdk:21
     resource_class: lutergs/lutergs-oracle-cloud
