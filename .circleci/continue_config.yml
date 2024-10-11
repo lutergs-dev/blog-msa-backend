@@ -1,0 +1,63 @@
+version: 2.1
+
+orbs:
+  aws-cli: circleci/aws-cli@5.1.0
+  aws-ecr: circleci/aws-ecr@9.3.4
+
+parameters:
+  user-service:
+    type: boolean
+    default: false
+  run-them-all:
+    type: boolean
+    default: false
+
+jobs:
+  test-user-service:
+    executor: docker
+    docker:
+      - image: cimg/openjdk:21
+    resource_class: lutergs/lutergs-minipc
+    steps:
+      - checkout
+      - run:
+          name: Test Java
+          command: |
+            ./gradlew User:test
+  ci-user-service:
+    executor: docker
+    docker:
+      - image: cimg/openjdk:21
+    resource_class: lutergs/lutergs-oracle-cloud
+    steps:
+      - checkout
+      - run:
+          name: Get User service version
+          command: |
+            echo "export VERSION=$(./gradlew User:properties | grep '^version:' | awk '{print $2}')" >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - aws-ecr/build-and-push-image:
+          repo: lutergs-backend-user-service
+          tag: "$VERSION"
+          create_repo: true
+          dockerfile: "User/Dockerfile"
+          executors: base
+          extra_build_args: '--compress'
+          no_output_timeout: 20m
+          path: "User/"
+          platform: linux/arm64
+          public_registry: false
+          push_image: true
+          region: ${AWS_REGION}
+          set_repo_policy: true
+          skip_when_tags_exist: false
+
+workflows:
+  user-service:
+    when:
+      and:
+        - << pipeline.parameters.user-service >>
+        - equal: [ main, << pipeline.git.branch >> ]
+    jobs:
+      - test-user-service
+      - ci-user-service
