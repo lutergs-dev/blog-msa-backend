@@ -55,9 +55,9 @@ jobs:
 workflows:
   user-service:
     when:
-      or:
+      and:
         - << pipeline.parameters.user-service >>
-        - << pipeline.parameters.run-them-all >>
+        - equal: [ main, << pipeline.git.branch >> ]
     jobs:
       - test-user-service
       - ci-user-service
