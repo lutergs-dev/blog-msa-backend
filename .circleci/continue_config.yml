@@ -22,12 +22,10 @@ jobs:
           name: Test Java
           command: |
             ./gradlew User:test
-    executor: default
   ci-user-service:
     docker:
       - image: cimg/openjdk:21
     resource_class: lutergs/lutergs-oracle-cloud
-    executor: default
     steps:
       - run:
           name: Get User service version
