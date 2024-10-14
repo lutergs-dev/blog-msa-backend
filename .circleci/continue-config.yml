@@ -22,12 +22,12 @@ jobs:
       - run:
           name: Test Java
           command: |
-            ./gradlew User:test
+            gradle User:test
       - run:
           name: Get User service version
           command: |
-            echo "export VERSION=$(./gradlew User:properties | grep '^version:' | awk '{print $2}')" >> version
-            mkdir workspace
+            mkdir -p workspace
+            echo "export VERSION=$(./gradlew User:properties | grep '^version:' | awk '{print $2}')" >> workspace/version
       - persist_to_workspace:
           root: workspace
           paths:
