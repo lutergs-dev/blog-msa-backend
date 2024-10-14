@@ -23,7 +23,7 @@ jobs:
           name: Test Java
           command: |
             ./gradlew User:test
-  build-user-service:
+  get-version-user-service:
     docker:
       - image: cimg/openjdk:21.0.4
     resource_class: lutergs/minipc-kubernetes
@@ -83,7 +83,9 @@ workflows:
 
     jobs:
       - test-user-service
-      - build-user-service
+      - get-version-user-service
       - aws-build-and-publish-image:
           context: aws
+          requires:
+            - get-version-user-service
 
