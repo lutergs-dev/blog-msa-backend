@@ -14,7 +14,6 @@ parameters:
 
 jobs:
   test-user-service:
-    machine: true
     docker:
       - image: cimg/openjdk:21.0.4
     resource_class: lutergs/lutergs-minipc
@@ -27,7 +26,6 @@ jobs:
     docker:
       - image: cimg/openjdk:21.0.4
     resource_class: lutergs/lutergs-minipc
-    machine: true
     steps:
       - run:
           name: Get User service version
