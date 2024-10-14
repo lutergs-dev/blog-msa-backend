@@ -16,7 +16,7 @@ jobs:
   test-user-service:
     docker:
       - image: cimg/openjdk:21.0.4
-    resource_class: lutergs/lutergs-minipc
+    resource_class: lutergs/minipc-kubernetes
     steps:
       - run:
           name: Test Java
@@ -25,7 +25,7 @@ jobs:
   build-user-service:
     docker:
       - image: cimg/openjdk:21.0.4
-    resource_class: lutergs/lutergs-minipc
+    resource_class: lutergs/minipc-kubernetes
     steps:
       - run:
           name: Get User service version
@@ -33,8 +33,8 @@ jobs:
             echo "export VERSION=$(./gradlew User:properties | grep '^version:' | awk '{print $2}')" >> "$BASH_ENV"
             source "$BASH_ENV"
   aws-build-and-publish-image:
+    resource_class: lutergs/minipc-kubernetes
     machine: true
-    resource_class: lutergs/lutergs-minipc
     steps:
       - aws-ecr/build_and_push_image:
           repo: lutergs-backend-user-service

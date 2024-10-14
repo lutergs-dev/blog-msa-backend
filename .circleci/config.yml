@@ -2,6 +2,24 @@ version: '2.1'
 setup: true
 orbs:
   path-filtering: circleci/path-filtering@1.1.0
+
+executors:
+  lutergs:
+    machine: true
+    resource_class: lutergs/minipc-kubernetes
+
+jobs:
+  path-filter:
+    resource_class:
+    steps:
+      - path-filtering/filter:
+          base-revision: main
+          config-path: .circleci/continue-config.yml
+          mapping: |
+            User/.* user-service true
+            Utils/.* util-updated true
+    executor: lutergs
+
 workflows:
   generate-config:
     jobs:
