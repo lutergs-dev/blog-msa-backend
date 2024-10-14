@@ -85,7 +85,7 @@ workflows:
       - test-user-service
       - get-version-user-service:
           requires:
-            test-user-service
+            - test-user-service
       - aws-build-and-publish-image:
           context: aws
           requires:
