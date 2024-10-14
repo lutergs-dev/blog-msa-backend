@@ -16,7 +16,7 @@ jobs:
   test-user-service:
     docker:
       - image: cimg/openjdk:21
-    resource_class: lutergs/lutergs-minipc
+#    resource_class: lutergs/lutergs-minipc
     steps:
       - run:
           name: Test Java
@@ -25,7 +25,7 @@ jobs:
   build-user-service:
     docker:
       - image: cimg/openjdk:21
-    resource_class: lutergs/lutergs-oracle-cloud
+#    resource_class: lutergs/lutergs-oracle-cloud
     steps:
       - run:
           name: Get User service version
