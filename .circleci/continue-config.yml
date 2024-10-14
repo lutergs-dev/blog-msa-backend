@@ -32,11 +32,6 @@ jobs:
           command: |
             echo "export VERSION=$(./gradlew User:properties | grep '^version:' | awk '{print $2}')" >> "$BASH_ENV"
             source "$BASH_ENV"
-      - run:
-          name: Build Jar
-          command: |
-            ./gradlew User:bootJar
-
 
 
 workflows:
@@ -53,7 +48,6 @@ workflows:
       - test-user-service
       - build-user-service
       - aws-ecr/build_and_push_image:
-          resource_class: lutergs/lutergs-oracle-cloud
           repo: lutergs-backend-user-service
           account_id: ${}
           tag: latest,${VERSION}
