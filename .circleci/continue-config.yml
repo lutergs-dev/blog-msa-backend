@@ -15,8 +15,8 @@ parameters:
 jobs:
   test-user-service:
     docker:
-      - image: cimg/openjdk:21
-#    resource_class: lutergs/lutergs-minipc
+      - image: cimg/openjdk:21.0.4
+    resource_class: lutergs/lutergs-minipc
     steps:
       - run:
           name: Test Java
@@ -24,8 +24,8 @@ jobs:
             ./gradlew User:test
   build-user-service:
     docker:
-      - image: cimg/openjdk:21
-#    resource_class: lutergs/lutergs-oracle-cloud
+      - image: cimg/openjdk:21.0.4
+    resource_class: lutergs/lutergs-oracle-cloud
     steps:
       - run:
           name: Get User service version
