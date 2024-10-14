@@ -48,9 +48,10 @@ workflows:
     jobs:
       - test-user-service
       - build-user-service
-      - aws-ecr/build-and-push-image:
+      - aws-ecr/build_and_push_image:
+          resource_class: lutergs/lutergs-oracle-cloud
           repo: lutergs-backend-user-service
-          tag: "$VERSION"
+          tag: ${VERSION}
           create_repo: true
           dockerfile: "User/Dockerfile"
           executors: base
