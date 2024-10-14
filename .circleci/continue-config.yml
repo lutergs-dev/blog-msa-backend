@@ -47,27 +47,19 @@ jobs:
           name: set variable
           command: |
             source ./workspace/version
-      - aws-ecr/build_and_push_image:
-          repo: lutergs-backend-user-service
-          account_id: ${AWS_ACCOUNT_ID}
-          tag: latest,${VERSION}
-          auth:
-            - aws-cli/setup:
-                profile_name: default
-                region: ap-northeast-2
-          create_repo: true
-          dockerfile: "User/Dockerfile"
-          extra_build_args: '--compress'
-          no_output_timeout: 20m
-          path: "User/"
-          platform: linux/arm64
-          public_registry: false
-          profile_name: defailt
-          push_image: true
-          region: ${AWS_REGION}
-          set_repo_policy: true
-          skip_when_tags_exist: false
-          use_credentials_helper: false # Rocky linux won't support this
+      - run:
+          name: Build and publish to AWS ECR
+          run: |
+            cd User
+            
+            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com
+            docker buildx build --comporess --platform linux/arm64 \
+              -t $AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com/lutergs-backend:$VERSION \
+              -t $AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com/lutergs-backend:latest \
+              . 
+            
+            docker push $AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com/lutergs-backend:$VERSION
+            docker push $AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com/lutergs-backend:latest
 
 
 workflows:
