@@ -32,16 +32,26 @@ jobs:
       - run:
           name: Get User service version
           command: |
-            echo "export VERSION=$(./gradlew User:properties | grep '^version:' | awk '{print $2}')" >> "$BASH_ENV"
-            source "$BASH_ENV"
+            echo "export VERSION=$(./gradlew User:properties | grep '^version:' | awk '{print $2}')" >> version
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - version
+
   aws-build-and-publish-image:
-    resource_class: lutergs/minipc-kubernetes
-    machine:
-      image: ubuntu-2204:current
+    resource_class: lutergs/minipc-machine
+    machine: true
     steps:
+      - checkout
+      - attach_workspace:
+          at: ./workspace
+      - run:
+          name: set variable
+          command: |
+            source ./workspace/version
       - aws-ecr/build_and_push_image:
           repo: lutergs-backend-user-service
-          account_id: ${}
+          account_id: ${AWS_ACCOUNT_ID}
           tag: latest,${VERSION}
           auth:
             - aws-cli/setup:
@@ -49,7 +59,7 @@ jobs:
                 region: ap-northeast-2
           create_repo: true
           dockerfile: "User/Dockerfile"
-          extra_build_args: '--compress --build-arg VERSION=$VERSION'
+          extra_build_args: '--compress'
           no_output_timeout: 20m
           path: "User/"
           platform: linux/arm64
