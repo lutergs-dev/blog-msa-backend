@@ -16,7 +16,7 @@ jobs:
   test-user-service:
     docker:
       - image: cimg/openjdk:21.0.4
-    resource_class: lutergs/lutergs-minipc
+    resource_class: lutergs/lutergs-oracle-cloud
     steps:
       - run:
           name: Test Java
@@ -53,6 +53,7 @@ workflows:
           tag: latest,${VERSION}
           auth:
             - aws-cli/setup:
+                profile: default
                 region: ap-northeast-2
           create_repo: true
           dockerfile: "User/Dockerfile"
@@ -61,6 +62,7 @@ workflows:
           path: "User/"
           platform: linux/arm64
           public_registry: false
+          profile_name: defailt
           push_image: true
           region: ${AWS_REGION}
           set_repo_policy: true
