@@ -8,7 +8,7 @@ parameters:
   user-service:
     type: boolean
     default: false
-  run-them-all:
+  util-updated:
     type: boolean
     default: false
 
@@ -43,8 +43,12 @@ workflows:
   user-service:
     when:
       and:
-        - equal: [ "true", << pipeline.parameters.user-service >>]
         - equal: [ "main", << pipeline.git.branch >> ]
+        - or:
+          - equal: [ "true", << pipeline.parameters.user-service >>]
+          - equal: [ "true", << pipeline.parameters.util-updated >>]
+
+
     jobs:
       - test-user-service
       - build-user-service

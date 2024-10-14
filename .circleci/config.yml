@@ -10,4 +10,4 @@ workflows:
           config-path: .circleci/continue_config.yml
           mapping: |
             User/.* user-service true
-            shared-things/.* run-them-all true
+            Utils/.* util-updated true

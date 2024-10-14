@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration(value = "LuterGS_BlogUtilSpringConfiguration")
 class SpringConfiguration {
-
     @ConditionalOnMissingBean
     @Bean
     fun springObjectMapper(): ObjectMapper = objectMapper()
