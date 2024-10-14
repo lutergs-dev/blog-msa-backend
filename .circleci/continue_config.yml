@@ -42,19 +42,22 @@ jobs:
 workflows:
   user-service:
     when:
-      or:
-        - << pipeline.parameters.user-service >>
-        - equal: [ main, << pipeline.git.branch >> ]
+      and:
+        - equal: [ "true", << pipeline.parameters.user-service >>]
+        - equal: [ "main", << pipeline.git.branch >> ]
     jobs:
       - test-user-service
       - build-user-service
       - aws-ecr/build_and_push_image:
           resource_class: lutergs/lutergs-oracle-cloud
           repo: lutergs-backend-user-service
+          account_id: ${}
           tag: ${VERSION}
+          auth:
+            - aws-cli/setup:
+                region: ap-northeast-2
           create_repo: true
           dockerfile: "User/Dockerfile"
-          executors: base
           extra_build_args: '--compress --build-arg VERSION=$VERSION'
           no_output_timeout: 20m
           path: "User/"
