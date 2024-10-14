@@ -75,7 +75,6 @@ workflows:
     jobs:
       - test-and-set-version-user-service
       - aws-build-and-publish-image:
-          context: aws
           requires:
             - test-and-set-version-user-service
 
