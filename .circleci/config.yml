@@ -6,8 +6,9 @@ workflows:
   generate-config:
     jobs:
       - path-filtering/filter:
+          executor: lutergs/lutergs-minipc
           base-revision: main
-          config-path: .circleci/continue_config.yml
+          config-path: .circleci/continue-config.yml
           mapping: |
             User/.* user-service true
             Utils/.* util-updated true

@@ -1,8 +1,14 @@
+FROM gradle:8.10.2-jdk21 AS builder
+
+RUN mkdir /build
+WORKDIR /build
+COPY ../ /build
+
+RUN ./gradlew User:bootJar
+
 FROM amazoncorretto:21-alpine-jdk
 
-ARG VERSION
-
-COPY ./build/libs/User-$VERSION.jar /app.jar
+COPY --from=builder /build/User/build/libs/*.jar /app.jar
 
 ENV TIMEZONE=Asia/Seoul
 ENV ACTIVE_PROFILE=server

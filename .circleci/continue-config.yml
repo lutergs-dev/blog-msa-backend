@@ -56,7 +56,7 @@ workflows:
           resource_class: lutergs/lutergs-oracle-cloud
           repo: lutergs-backend-user-service
           account_id: ${}
-          tag: ${VERSION}
+          tag: latest,${VERSION}
           auth:
             - aws-cli/setup:
                 region: ap-northeast-2
