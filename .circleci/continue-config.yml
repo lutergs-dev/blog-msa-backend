@@ -14,9 +14,10 @@ parameters:
 
 jobs:
   test-user-service:
+    machine: true
     docker:
       - image: cimg/openjdk:21.0.4
-    resource_class: lutergs/lutergs-oracle-cloud
+    resource_class: lutergs/lutergs-minipc
     steps:
       - run:
           name: Test Java
@@ -25,13 +26,38 @@ jobs:
   build-user-service:
     docker:
       - image: cimg/openjdk:21.0.4
-    resource_class: lutergs/lutergs-oracle-cloud
+    resource_class: lutergs/lutergs-minipc
+    machine: true
     steps:
       - run:
           name: Get User service version
           command: |
             echo "export VERSION=$(./gradlew User:properties | grep '^version:' | awk '{print $2}')" >> "$BASH_ENV"
             source "$BASH_ENV"
+  aws-build-and-publish-image:
+    machine: true
+    resource_class: lutergs/lutergs-minipc
+    steps:
+      - aws-ecr/build_and_push_image:
+          repo: lutergs-backend-user-service
+          account_id: ${}
+          tag: latest,${VERSION}
+          auth:
+            - aws-cli/setup:
+                profile_name: default
+                region: ap-northeast-2
+          create_repo: true
+          dockerfile: "User/Dockerfile"
+          extra_build_args: '--compress --build-arg VERSION=$VERSION'
+          no_output_timeout: 20m
+          path: "User/"
+          platform: linux/arm64
+          public_registry: false
+          profile_name: defailt
+          push_image: true
+          region: ${AWS_REGION}
+          set_repo_policy: true
+          skip_when_tags_exist: false
 
 
 workflows:
@@ -47,23 +73,6 @@ workflows:
     jobs:
       - test-user-service
       - build-user-service
-      - aws-ecr/build_and_push_image:
-          repo: lutergs-backend-user-service
-          account_id: ${}
-          tag: latest,${VERSION}
-          auth:
-            - aws-cli/setup:
-                profile: default
-                region: ap-northeast-2
-          create_repo: true
-          dockerfile: "User/Dockerfile"
-          extra_build_args: '--compress --build-arg VERSION=$VERSION'
-          no_output_timeout: 20m
-          path: "User/"
-          platform: linux/arm64
-          public_registry: false
-          profile_name: defailt
-          push_image: true
-          region: ${AWS_REGION}
-          set_repo_policy: true
-          skip_when_tags_exist: false
+      - aws-build-and-publish-image:
+          context: aws
+
