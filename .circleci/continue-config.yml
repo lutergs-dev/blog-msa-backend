@@ -53,7 +53,7 @@ jobs:
             cd User
             
             aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com
-            docker buildx build --comporess --platform linux/arm64 \
+            docker buildx build --compress --platform linux/arm64 \
               -t $AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com/lutergs-backend:$VERSION \
               -t $AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com/lutergs-backend:latest \
               . 
