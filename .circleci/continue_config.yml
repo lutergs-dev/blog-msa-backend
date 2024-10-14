@@ -41,12 +41,12 @@ jobs:
 
 workflows:
   user-service:
-    when:
-      and:
-        - equal: [ "main", << pipeline.git.branch >> ]
-        - or:
-          - equal: [ "true", << pipeline.parameters.user-service >>]
-          - equal: [ "true", << pipeline.parameters.util-updated >>]
+#    when:
+#      and:
+#        - equal: [ "main", << pipeline.git.branch >> ]
+#        - or:
+#          - equal: [ "true", << pipeline.parameters.user-service >>]
+#          - equal: [ "true", << pipeline.parameters.util-updated >>]
 
 
     jobs:
