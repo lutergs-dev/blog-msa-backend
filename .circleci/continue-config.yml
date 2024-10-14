@@ -67,6 +67,7 @@ jobs:
           region: ${AWS_REGION}
           set_repo_policy: true
           skip_when_tags_exist: false
+          use_credentials_helper: false # Rocky linux won't support this
 
 
 workflows:
