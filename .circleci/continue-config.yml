@@ -18,6 +18,7 @@ jobs:
       - image: cimg/openjdk:21.0.4
     resource_class: lutergs/minipc-kubernetes
     steps:
+      - checkout
       - run:
           name: Test Java
           command: |
@@ -27,6 +28,7 @@ jobs:
       - image: cimg/openjdk:21.0.4
     resource_class: lutergs/minipc-kubernetes
     steps:
+      - checkout
       - run:
           name: Get User service version
           command: |
@@ -34,7 +36,6 @@ jobs:
             source "$BASH_ENV"
   aws-build-and-publish-image:
     resource_class: lutergs/minipc-kubernetes
-    machine: true
     steps:
       - aws-ecr/build_and_push_image:
           repo: lutergs-backend-user-service
